@@ -1,0 +1,7 @@
+
+In our basic model, compensatory mutations are common (large mutational target) but they do not completely compensate for the cost of the adaptive mutation. Therefore, even if a bacteria has acquired a compensatory mutation, there is still selection pressure for the reversal of the adaptive mutation. However, if there were compensatory mutations that  could completely restore the WT fitness, there’d be no selection for reversal anymore. The result would be that the adaptive mutation would be more persistent. 
+When we run simulations without any perfectly compensating mutations, increasing theta leads to a drastic increase in the number of samples with the reversal mutation (red line in Fig X). If we include perfectly compensating mutations, we see that the average number of reverted samples is reduced for higher Theta. 
+
+Now I am confused. If there is one perfectly compensating mutation, shouldn't the num reverted be no higher than 5? 
+
+We ran simulations with a small number of perfectly compensating mutations. 
