@@ -6,7 +6,8 @@ c = 0.1 #cost of resistance
 comp = 0.5 #effect of compensatory mutation (0.5 means half of cost is compensated, 1.5 means that cost is more than compensated)
 muvalues<-1/N*c(0.001,0.01,0.1,1,10)
 n=100
-for (mu in muvalues[1:3]){
+
+for (mu in muvalues){
   #mu = muvalues[2]
   print(paste0("mu ", mu, " NoWT_YesCR"))
   for (j in 1:10){#starting the sim and  plotting it! 
@@ -49,7 +50,6 @@ for (mu in muvalues[1:3]){
     points(popArrayDF$Res/N, type="l", col="orange", lwd=2)
     points(1-popArrayDF$Res/N-popArrayDF$CR/N-popArrayDF$WT/N, type="l", col="green", lwd=3)
     
-    
     #Prob WT Escape total
     ProbWTEscape=max(1-ProbNo)
     print(ProbWTEscape)
@@ -58,7 +58,7 @@ for (mu in muvalues[1:3]){
 
 #####DETERMINISTIC APPROX
 s_comp = (1-(c*(1-comp)))/(1-c) - 1
-
+if (FALSE){
 for (mu in muvalues[2]){
   #mu = muvalues[2]
   print(paste0("mu ", mu, " NoWT_YesCR"))
@@ -85,16 +85,17 @@ for (mu in muvalues[2]){
     points(popArrayDF$Res, type = "l", col=2)
   }
 }
+}
 #OK, so now the big question is whether this rough deterministic-ish approximation can 
 #tell us the probability that WT comes up in the pop. 
 
 #First, use the approximation to calculate the probability of escape. 
-for (mu in muvalues){
-  #mu = muvalues[2]
-  print(paste0("mu ", mu, " NoWT_YesCR"))
+manymuvalues = 10^(seq(-8,-3, by = 0.1))
+listofProb = c()
+for (mu in manymuvalues){
+#  print(paste0("mu ", mu, " NoWT_YesCR"))
   #Rather, make deterministic model for the comp mutations
   rate_succ_comp = min(1,  2 * s_comp * N * mu *n)
-  
   NresList = rep(N, floor(1/rate_succ_comp)); #Waiting time until successful mutation comes along
   Nres = N 
   for (i in 1:1000){
@@ -113,8 +114,11 @@ for (mu in muvalues){
     ProbReal = c(ProbReal, ProbNo[i-1]*ProbRaw[i])
     ProbNo = c(ProbNo, ProbNo[i-1]-ProbReal[i])
   }
-print(1-min(ProbNo))
+  listofProb <- c(listofProb, (1-min(ProbNo)))
 }
+plot(manymuvalues*N, listofProb, log = "x", ylim = c(0,1), type = "l")
+abline (h = 0.01, lty = "dashed")
+points(muvalues*N, listProbWTEscape, pch = 16)
 
 #To check this, I need  to run many sims, (with WT and not CR?) to determine that probability in the sims. 
 #Why is this interesting? To get an intuitive understanding of whether WT occurs  and 
