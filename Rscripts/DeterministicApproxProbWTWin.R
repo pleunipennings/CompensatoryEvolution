@@ -24,6 +24,7 @@ for (n in c(25, 50, 100, 200)){
       rate_succ_comp = min (1, 1 - (1-2*s_comp*mu)^(N*n)) #rate at which successful comp mutations happen
       waitingtime_succ_comp = min (G, floor(1/rate_succ_comp)) #average waiting time exponential
       print(waitingtime_succ_comp)
+      waitingtime_succ_comp = 1 #if it is a deterministic approximation, maybe I should assume that the comp mut is there immediately?
       NresList = rep(N, waitingtime_succ_comp); #Nres doesn't change until first successful comp mut occurs. 
       Nres = N-1; Nc = 1;
       #for (i in 1:(G-waitingtime_succ_comp)){ #500 generations, just like the simulations # find Nres for G generations

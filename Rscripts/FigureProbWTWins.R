@@ -22,11 +22,11 @@ for (comp in c(0.1, 0.2, 0.5, 0.8)){
   points(ProbWTWinDF$theta[ProbWTWinDF$comp==comp & ProbWTWinDF$n == n]*xjiggle, 
          ProbWTWinDF$probWTWin[ProbWTWinDF$comp==comp & ProbWTWinDF$n == n], pch = pch, cex = 1.5, col = color)
 }
-legend(x = 0.5, 0.5, legend = paste("p =", c(0.1, 0.2, 0.5, 0.8)), col = 1:4, pch = 2:5)
+legend(x = 0.2, 0.5, legend = paste("p =", c(0.1, 0.2, 0.5, 0.8)), col = 1:4, pch = 2:5, title = "effect of comp. mutations")
 
 plot(ProbWTWinDet$theta, ProbWTWinDet$probWTWin, log = "x", ylim = c(0,1), 
      type = "l", xlim=c(10^-4, 10), col = 0, 
-     main =paste0("Prob WT wins, different n values"), 
+     main =paste0("Prob WT wins, different n values, p = 0.5"), 
      xaxt="n", yaxt = "n", xlab = "N * mu", ylab = "Prob WT wins")
 axis(side = 1, at = c(10^-3, 10^-2, 10^-1, 1, 10), labels = c(10^-3, 10^-2, 10^-1, 1, 10), las = 1)
 axis(side = 2, at = seq(0,1,0.1), labels = seq(0,1,0.1), las = 1)
@@ -40,7 +40,7 @@ for (n in c(25,50,100,200)){
   points(ProbWTWinDF$theta[ProbWTWinDF$comp==comp & ProbWTWinDF$n == n]*xjiggle, 
          ProbWTWinDF$probWTWin[ProbWTWinDF$comp==comp & ProbWTWinDF$n == n], pch = pch, cex = 1.5, col = color)
 }
-legend(x = 0.5, 0.5, legend = paste("n =", c(25,50,100,200)), col = 1:4, pch = 2:5)
+legend(x = 0.2, 0.5, legend = paste("n =", c(25,50,100,200)), col = 1:4, pch = 2:5, title = "number of comp mutations")
 
 dev.off()
 
