@@ -10,7 +10,7 @@ source("Rscripts/NewPopArray_RawFitnessArray.R")
 if (TRUE){
   N =10000 #total pop size
   G = 100 #numgenerations
-  c = 0.1 #cost of resistance
+  c = 0.15 #cost of resistance
   comp = 0.5 #effect of compensatory mutation (0.5 means half of cost is compensated, 1.5 means that cost is more than compensated)
   mu = 0.03/N # mutation rate
   numSims = 100
