@@ -1,17 +1,17 @@
 #This script uses data from SimData and makes a stacked barplot as used as Fig 1 in manuscript Sept 2020
 N =10000 #total pop size
 G = 100 #numgenerations
-c = 0.1 #cost of resistance
+c = 0.15 #cost of resistance
 comp = 0.5 #effect of compensatory mutation (0.5 means half of cost is compensated, 1.5 means that cost is more than compensated)
 muvalues<-1/N*c(0.001,0.01,0.1,1,10)
 
 #Note: in samplearray is Compensated & reverted at index 3. In popArrayDF juist op de laatste index. 
 
-pdf(paste0("Output/MutatorEffectMutipleCompStrains_10Clones",G,"Gen",comp,"comp",Sys.Date(), ".pdf"), width = 7, height =9)
+jpeg(paste0("Output/MutatorEffectMutipleCompStrains_10Clones",G,"Gen",comp,"comp", c, "c",Sys.Date(), ".jpg"), width = 7, height =9, units = "in", res = 300)
 par(mar = c(3.5, 2.5, 4, 1.))
 par(mfrow=c(3,2))
 for (mu in muvalues){
-  Sample10Array = read.csv(file = paste0("SimData/Sample10Array",G,"Gen",comp,"comp",mu,"mu.csv"),header = TRUE)
+  Sample10Array = read.csv(file = paste0("SimData/Sample10Array",G,"Gen",comp,"comp",c, "c", mu,"mu.csv"),header = TRUE)
   #library(RColorBrewer)
   #"#D7191C" "#FDAE61" "#ABD9E9" "#2C7BB6"
   coul = c('#D7191C','#FDAE61','#2C7BB6','#7fc97f', '#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b','#74c476','#41ab5d','#238b45','#006d2c','#00441b')

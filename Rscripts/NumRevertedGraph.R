@@ -6,8 +6,8 @@ source("Rscripts/NewPopArray_RawFitnessArray.R")
 if (TRUE){
   N =10000 #total pop size
   #  G = 150 #numgenerations
-  c = 0.1 #cost of resistance
-  comp = 0.5 #effect of compensatory mutation (0.5 means half of cost is compensated, 1.5 means that cost is more than compensated)
+  c = 0.15 #cost of resistance
+  p = 0.5 #effect of compensatory mutation (0.5 means half of cost is compensated, 1.5 means that cost is more than compensated)
   mu = 0.03/N # mutation rate
   numSims = 100
   n=100 #n is number of possible different comp mutations
@@ -23,7 +23,7 @@ muvalues<-1/N*c(0.01, 0.1, 1, 10,100)
 #muvalues<-1/N*c(100)
 for (NumPossiblePerfectCompMuts in c(0:5, 10)){
 #for (NumPossiblePerfectCompMuts in c(0,1)){
-  rawfitnessarray=c(1, 1-c, rep(1-(c*(1-comp)),n), 1)
+  rawfitnessarray=c(1, 1-c, rep(1-(c*(1-p)),n), 1)
   PerfectCompindeces=c()
   if (NumPossiblePerfectCompMuts>0) PerfectCompindeces=3:(3+NumPossiblePerfectCompMuts-1) #make 0-10 comp mutations perfect
   rawfitnessarray[PerfectCompindeces]<-1
@@ -33,7 +33,7 @@ for (NumPossiblePerfectCompMuts in c(0:5, 10)){
   #for (mu in muvalues[length(muvalues)]){
     print(mu)
     Sample10Array<-data.frame(X=c("WT", "Res","CR", paste0("pcomp",1:10),paste0("comp",1:10)))
-    for (j in 1:50){#starting the sim and  plotting it! 
+    for (j in 1:100){#starting the sim and  plotting it! 
       colnamesDF = c("Gen", "WT", "Res",paste0("comp", 1:n), "CR")
       popArray<-c(0, N, rep(0, n), 0)#start with everyone resistant
       popArrayDF <- as.data.frame(matrix(0, ncol = length(colnamesDF), nrow = 1))
@@ -78,7 +78,7 @@ qplot(log(Theta), MeanNumReverted, data = DF_Outcome, color = factor(NumPerfect)
 #         position=position_dodge(.6)) 
 
 ggsave(
-  paste0("Output/NumReverted_G",G,"_", Sys.Date(),".pdf"),
+  paste0("Output/NumReverted_G",G,"_p",p,"_c",c, Sys.Date(),".jpg"),
   plot = last_plot(),
   device = NULL,
   path = NULL,
@@ -91,12 +91,10 @@ ggsave(
 )
 
 if(TRUE){
-#  DF_OutcomeComplete = DF_Outcome
-#DF_Outcome = DF_Outcome [DF_Outcome$Theta<100,]
-p = qplot(log(Theta* rep(c(0.85,0.9, 0.95, 1, 1.05,1.1, 1.15), each =5)) , MeanNumReverted, data = DF_Outcome, color = factor(NumPerfect),
+pl = qplot(log(Theta* rep(c(0.85,0.9, 0.95, 1, 1.05,1.1, 1.15), each =5)) , MeanNumReverted, data = DF_Outcome, color = factor(NumPerfect),
           geom=c("line","point"), ylab="Number reverted in sample of 10", xlab = "10 log Theta")
 
-p+ scale_colour_manual(values = c('#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4'), 
+pl+ scale_colour_manual(values = c('#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4'), 
                        name="# perfectly compensating mutations")+
   scale_y_discrete("Number reverted in sample of 10", 0:10, 0:10, 0:10)+
   #scale_x_discrete(name ="Dose (mg)",  limits=c("2","1","0.5"))
@@ -105,23 +103,16 @@ p+ scale_colour_manual(values = c('#d73027','#f46d43','#fdae61','#fee090','#e0f3
                 position=position_dodge(.6)) 
 
 ggsave(
-  paste0("Output/NumReverted_ErrorBars_G",G,"_", Sys.Date(),".pdf"),
+  paste0("Output/NumReverted_ErrorBars_G",G,"_p",p,"_c",c, Sys.Date(),".jpg"),
   plot = last_plot(),
-  width = 10)
+  device = NULL,
+  path = NULL,
+  #scale = 1,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  limitsize = TRUE,
+)
 }
 
-#Analytical prediction
-
-if (FALSE){
-DF_Outcome$PredictedNumReverted <-0
-
-PredictedNumReverted<-function(theta_r, theta_c, s_r, s_c){
-  return((theta_r*s_r)/(theta_r*s_r+s_c+theta_c*s_c))
-}
-
-for (i in 1:nrow(DF_Outcome)){
-  theta_r = DF_Outcome$Theta[i]
-  theta_c = DF_Outcome$Theta[i]*DF_Outcome$NumPerfect[i]
-  DF_Outcome$PredictedNumReverted[i]<-10*PredictedNumReverted(theta_r, theta_c, 1/(1-c)-1, 1/(1-c)-1)
-}
-}

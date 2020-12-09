@@ -3,7 +3,7 @@
 if (TRUE){
   N =10000 #total pop size
   G = 100 #numgenerations
-  c = 0.1 #cost of resistance
+  c = 0.15 #cost of resistance
   comp = 0.5 #effect of compensatory mutation (0.5 means half of cost is compensated, 1.5 means that cost is more than compensated)
   mu = 0.03/N # mutation rate
   numSims = 100
@@ -35,6 +35,7 @@ for (n in c(25, 50, 100, 200)){
       }
       popfitnessList = (NresList*(1-c) + (N-NresList)*(1-(c*(1-comp))))/N # population fitness 
       s_WT_List = 1/popfitnessList - 1 #selection coefficient WT mutation
+      pfix = (1-exp(-2*s_WT_List))/(1-exp(-2*N*s_WT_List))
       ProbRawList = 1 - (1-2*s_WT_List*mu)^NresList #prob that a successful WT mutant arises
       #Calculate real probability  (taking into account that it may have happened before)
       i=1

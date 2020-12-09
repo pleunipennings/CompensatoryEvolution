@@ -14,8 +14,8 @@ source("Rscripts/NewPopArray_RawFitnessArray.R")
 if (TRUE){
 N =10000 #total pop size
 G = 100 #numgenerations
-c = 0.1 #cost of resistance
-comp = 0.1 #effect of compensatory mutation (0.5 means half of cost is compensated, 1.5 means that cost is more than compensated)
+c = 0.15 #cost of resistance
+comp = 0.5 #effect of compensatory mutation (0.5 means half of cost is compensated, 1.5 means that cost is more than compensated)
 mu = 0.03/N # mutation rate
 numSims = 100
 n=100 #n is number of possible different comp mutations
@@ -23,7 +23,7 @@ n=100 #n is number of possible different comp mutations
 
 #for (comp in seq(0,1,0.2)){
 #Run one sim per mut rate and plot identity of 10 clones per sim. 
-G=500; samplesize=10
+G=100; samplesize=10
 cex_red=0.8
 #muvalues<-1/N*c(0.005,0.05,0.5,5,50)
 muvalues<-1/N*c(0.001,0.01,0.1,1,10)
@@ -44,7 +44,7 @@ for (mu in muvalues){
     }
     #popArrayDF$TotalComp<-sum(popArrayDF[,])
     popArrayDF<-popArrayDF %>% mutate(sum = rowSums(.[compindeces+1]))
-    write.csv(x = popArrayDF, file = paste0("SimData/","popArrayDF",G,"Gen",comp,"comp",mu,"mu", j, "j.csv"), row.names = FALSE)
+    write.csv(x = popArrayDF, file = paste0("SimData/","popArrayDF",G,"Gen",comp,"comp",c, "c", mu,"mu", j, "j.csv"), row.names = FALSE)
     
   #run one sim and plot it
     #popArrayDF[150,2:(length(popArray)+1)]
@@ -60,6 +60,6 @@ for (mu in muvalues){
     #print(Sample10Array)
   }
   
-  write.csv(x = Sample10Array, file = paste0("SimData/","Sample10Array",G,"Gen",comp,"comp",mu,"mu.csv"), row.names = FALSE)
+  write.csv(x = Sample10Array, file = paste0("SimData/","Sample10Array",G,"Gen",comp,"comp",c, "c",mu,"mu.csv"), row.names = FALSE)
 }
 
